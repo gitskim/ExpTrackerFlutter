@@ -50,6 +50,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  static const platform = MethodChannel('samples.flutter.dev/sms');
+
   int _counter = 0;
 
   void _incrementCounter() {
@@ -61,6 +63,16 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  Future<void> _getMessages() async {
+    String messages;
+    try {
+      final int result = await platform.invokeMethod('getMessages');
+      messages = 'Get Messages $result % .';
+    } on PlatformException catch (e) {
+      messages = "Failed to get messages: '${e.message}'.";
+    }
   }
 
   @override
@@ -136,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               child: const Text('Sync'),
-              onPressed: _incrementCounter,
+              onPressed: _getMessages,
             ),
           ],
         ),
