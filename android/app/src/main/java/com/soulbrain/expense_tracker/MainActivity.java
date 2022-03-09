@@ -31,7 +31,7 @@ public class MainActivity extends FlutterActivity {
                         (call, result) -> {
                             // Note: this method is invoked on the main thread.
                             if (call.method.equals("getMessages")) {
-                                getBatteryLevel();
+                                getBatteryLevel((String) call.argument("text"));
 
                             } else {
                                 result.notImplemented();
@@ -40,7 +40,7 @@ public class MainActivity extends FlutterActivity {
                 );
     }
 
-    private void getBatteryLevel() {
+    private void getBatteryLevel(String text) {
         if (!hasReadSmsPermission()) {
             showRequestPermissionsInfoAlertDialog();
         } else {

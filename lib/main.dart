@@ -54,6 +54,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int _counter = 0;
 
+  final TextEditingController myController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myController.dispose();
+    super.dispose();
+  }
+
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -68,7 +77,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _getMessages() async {
     String messages;
     try {
-      final int result = await platform.invokeMethod('getMessages');
+      // TODO: failure handling if there's no text
+      messages = "ok '${myController.text}";
+      // final int result = await platform.invokeMethod('getMessages');
+      final int result = await platform
+          .invokeMethod('getMessages', {"text": myController.text});
       messages = 'Get Messages $result % .';
     } on PlatformException catch (e) {
       messages = "Failed to get messages: '${e.message}'.";
@@ -137,9 +150,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextField(
+              child: TextFormField(
+                controller: myController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: "Enter the number:",
