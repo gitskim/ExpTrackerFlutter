@@ -47,11 +47,15 @@ public class MainActivity extends FlutterActivity {
             // do nothing
         }
 
+        String AmericanExpressTextNumber = "692639";
+        String uri = "content://sms/inbox";
+        String selection = Telephony.Sms.ADDRESS + "=?";
+        String[] selectArgs = {AmericanExpressTextNumber};
         Cursor cursor = getContentResolver().query(
-                Uri.parse("content://sms/inbox"),
+                Uri.parse(uri),
                 null,
-                null,
-                null,
+                selection,
+                selectArgs,
                 null);
 
         int totalSMS = cursor.getCount();
@@ -64,9 +68,6 @@ public class MainActivity extends FlutterActivity {
             String smsDate = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.DATE));
             String number = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.ADDRESS));
             String body = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.BODY));
-            if (number.equals("692639")) {
-                numbers.add(number);
-            }
         }
         // else {
         // throw new RuntimeException("You have no SMS");
